@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Coding Things.unity
     guid: b3a793d542a273043b3d1669f460b820
+  - enabled: 1
+    path: Assets/Scenes/Level2.unity
+    guid: cfc8320c565f05a429526ea2260156a3
   m_configObjects: {}
