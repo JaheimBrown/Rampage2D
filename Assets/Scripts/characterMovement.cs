@@ -15,6 +15,9 @@ public class characterMovement : MonoBehaviour
 
     private enum MovementState { idle, running, jumping, falling };
 
+    // CLASS IMPORT
+    public CameraController cameraController;
+
     // Start is called before the first frame update
     private void Start()
     {
