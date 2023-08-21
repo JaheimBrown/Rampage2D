@@ -12,6 +12,9 @@ public class characterMovement : MonoBehaviour
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float jumpForce = 9f;
     [SerializeField] private LayerMask jumpableGround;
+    [SerializeField] private AudioClip jumpAudioClip;
+    [SerializeField] private AudioClip runAudioClip;
+    private AudioSource audioSource;
 
     private enum MovementState { idle, running, jumping, falling };
 
@@ -25,6 +28,7 @@ public class characterMovement : MonoBehaviour
         anim = GetComponent<Animator>();
         sprite = GetComponent<SpriteRenderer>();
         coll = GetComponent<Collider2D>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -34,7 +38,9 @@ public class characterMovement : MonoBehaviour
         rb.velocity = new Vector2(dirX * moveSpeed, rb.velocity.y);
         if (Input.GetButtonDown("Jump") && IsGrounded())
         {
-           rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            audioSource.clip = jumpAudioClip;
+            audioSource.Play();
         }
 
         UpdateAnimationState();
@@ -48,11 +54,20 @@ public class characterMovement : MonoBehaviour
         {
             state = MovementState.running;
             sprite.flipX = false;
+            if(IsGrounded() && Input.GetButtonDown("Horizontal")) {
+                audioSource.clip = runAudioClip;
+                audioSource.Play();
+            }
         }
         else if (dirX < 0f)
         {
             state = MovementState.running;
             sprite.flipX = true;
+            if (IsGrounded() && Input.GetButtonDown("Horizontal"))
+            {
+                audioSource.clip = runAudioClip;
+                audioSource.Play();
+            }
         }
         else
         {
@@ -62,6 +77,7 @@ public class characterMovement : MonoBehaviour
         if (rb.velocity.y > .1f)
         {
             state = MovementState.jumping;
+            
         } else if(rb.velocity.y < -.1f)
         {
             state = MovementState.falling;
@@ -74,4 +90,5 @@ public class characterMovement : MonoBehaviour
     {
         return Physics2D.BoxCast(coll.bounds.center, coll.bounds.size, 0f, Vector2.down, .1f, jumpableGround);
     }
+
 }
